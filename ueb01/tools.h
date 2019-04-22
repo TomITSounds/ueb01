@@ -31,7 +31,7 @@ int askAgain(int Row, int Column);
  Parameter:
  *Ergebnis:
  **********************************************************/
-void ClearScreen();
+void waitForEnter();
 
 /**********************************************************
  * Funktion:        ClearScreen
@@ -39,6 +39,6 @@ void ClearScreen();
  Parameter:
  *Ergebnis:
  **********************************************************/
-void ClearScreen();
+void clearScreen();
 
 #endif /* tools_h */

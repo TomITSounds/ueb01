@@ -45,8 +45,9 @@ int isTimeValid(TTime Time)
  Ergebnis:  Wahrheitswert als int bei erfolgreichem Kopieren
  Beschreib: Liest ein Datum aus einer Zeichenkette und kopiert die in Struct, ruft IsDateValid auf
  ***************************************************************************/
-int getDateFromString(char *Input, TDate Date)
+int getDateFromString(char *Input, TDate *Date)
 {
+    
     
 }
 /***************************************************************************
@@ -55,16 +56,20 @@ int getDateFromString(char *Input, TDate Date)
  Ergebnis:  Wahrheitswert als int bei erfolgreichem Kopieren
  Beschreib: Liest eine Zeit aus einer Zeichenkette und kopiert die in Struct, ruft IsTimeValid auf
  ***************************************************************************/
-int getTimeFromString(*char Input, TTime Time)
+int getTimeFromString(*char Input, *Time)
 {
     
 }
 /***************************************************************************
- Funktion:
- Parameter:
- Ergebnis:
- Beschreib:
+ Funktion:  askYesOrNo
+ Parameter: char string (Userprompt)
+ Ergebnis:  Wahrheitswert als int
+ Beschreib: Zeigt dem User einen Text (Aufforderung) Liest j/n Antwort ein
  ***************************************************************************/
+int askYesOrNo(char *Prompt)
+{
+    
+}
 
 /***************************************************************************
  Funktion:

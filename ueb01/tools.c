@@ -65,7 +65,10 @@ void stop()
  Parameter:
  *Ergebnis:
  **********************************************************/
-void ClearScreen()
+void waitForEnter()
+{
+    
+}
 
 /**********************************************************
  * Funktion:        ClearScreen
@@ -73,4 +76,7 @@ void ClearScreen()
  Parameter:
  *Ergebnis:
  **********************************************************/
-void ClearScreen()
+void clearScreen()
+{
+
+}
