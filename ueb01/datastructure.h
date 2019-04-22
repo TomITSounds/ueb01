@@ -8,16 +8,17 @@
 
 #ifndef datastructure_h
 #define datastructure_h
+
 typedef struct
 {   int Day;
     int Month;
     int Year;
-} TDate[50];
+} TDate;
 
 typedef struct
 {   int Hour;
     int Minute;
     int Second;
-} TTime[50];
+} TTime;
 
 #endif /* datastructure_h */
