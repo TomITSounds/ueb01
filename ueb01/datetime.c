@@ -16,8 +16,20 @@
  Beschreib: Wahr = Jahr ist ein Schaltjahr
  ***************************************************************************/
 int isLeapYear(int year)
-{
+{   int leapYear = 0;
+    if (year & 4 == 0)
+        if (leapYear & 100 == 0)
+                if (Year & 400 == 0)
+                    leapYear = 1;
+                else
+                    leapYear = 0;
+        else
+            leapYear = 1;
+        
+    else
+        leapYear = 0;
     
+    return leapYear;
 }
 /***************************************************************************
  Funktion:  isDateValid
