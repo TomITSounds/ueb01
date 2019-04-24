@@ -48,7 +48,7 @@ int getTimeFromString(char *Input, TTime *Time);
  Ergebnis:  Wahrheitswert als int
  Beschreib: Zeigt dem User einen Text (Aufforderung) Liest j/n Antwort ein
  ***************************************************************************/
-int askYesOrNo(char *);
+int askYesOrNo(char *Promt);
 
 /***************************************************************************
  Funktion:
