@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include "escapesequenzen.h"
 #include "tools.h"
+#include <stdlib.h>
 
 /**********************************************************
  * Funktion: clearBuffer
@@ -77,6 +78,6 @@ void waitForEnter()
  *Ergebnis:
  **********************************************************/
 void clearScreen()
-{
-
+{   system("clear");
+    system("cls");
 }

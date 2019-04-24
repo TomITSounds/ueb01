@@ -67,8 +67,23 @@ int getTimeFromString(*char Input, *Time)
  Beschreib: Zeigt dem User einen Text (Aufforderung) Liest j/n Antwort ein
  ***************************************************************************/
 int askYesOrNo(char *Prompt)
-{
-    
+{   int ans;
+    do
+    {   printf("\n");
+        printf(*Prompt);
+        printf("\n");
+        scanf("%c", &ans);
+        if (ans != '\n')
+            clearBuffer();
+        switch (ans)
+        {   case 'j':
+            case 'J':   ask = 1; break;
+            case 'n':
+            case 'N':   ask = 0; break;
+            default:    printf("Ungueltige Eingabe. Wollen sie nochmal? j/n\n");
+        }
+    }  while ( (ans != 'j') && (ans != 'J') && (ans != 'N') && (ans !='n') );
+    return ans;
 }
 
 /***************************************************************************
