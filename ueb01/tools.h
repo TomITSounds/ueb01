@@ -15,7 +15,7 @@
  * Parameter: Character
  * Ergebnis:
  **********************************************************/
-void clearBuffer();
+void clearBuffer(void);
 
 /**********************************************************
  * Funktion: askAgain
@@ -31,7 +31,7 @@ int askAgain(int Row, int Column);
  Parameter:
  *Ergebnis:
  **********************************************************/
-void waitForEnter();
+void waitForEnter(void);
 
 /**********************************************************
  * Funktion:        ClearScreen
@@ -39,6 +39,6 @@ void waitForEnter();
  Parameter:
  *Ergebnis:
  **********************************************************/
-void clearScreen();
+void clearScreen(void);
 
 #endif /* tools_h */

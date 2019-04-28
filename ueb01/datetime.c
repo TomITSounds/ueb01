@@ -6,6 +6,7 @@
 //  Copyright © 2019 Tom Mertens. All rights reserved.
 //
 
+#include <stdio.h>
 #include "datetime.h"
 #include "tools.h"
 #include "datastructure.h"
@@ -17,9 +18,9 @@
  ***************************************************************************/
 int isLeapYear(int year)
 {   int leapYear = 0;
-    if (year & 4 == 0)
-        if (leapYear & 100 == 0)
-                if (Year & 400 == 0)
+    if ((year & 4) == 0)
+        if ((leapYear & 100) == 0)
+                if ((leapYear & 400) == 0)
                     leapYear = 1;
                 else
                     leapYear = 0;
@@ -68,7 +69,7 @@ int getDateFromString(char *Input, TDate *Date)
  Ergebnis:  Wahrheitswert als int bei erfolgreichem Kopieren
  Beschreib: Liest eine Zeit aus einer Zeichenkette und kopiert die in Struct, ruft IsTimeValid auf
  ***************************************************************************/
-int getTimeFromString(*char Input, *Time)
+int getTimeFromString(char *Input, TTime *Time)
 {
     
 }
@@ -79,7 +80,8 @@ int getTimeFromString(*char Input, *Time)
  Beschreib: Zeigt dem User einen Text (Aufforderung) Liest j/n Antwort ein
  ***************************************************************************/
 int askYesOrNo(char *Prompt)
-{   int ans;
+{   char ans;
+    int ask;
     do
     {   printf("\n");
         printf(*Prompt);
@@ -95,7 +97,7 @@ int askYesOrNo(char *Prompt)
             default:    printf("Ungueltige Eingabe. Wollen sie nochmal? j/n\n");
         }
     }  while ( (ans != 'j') && (ans != 'J') && (ans != 'N') && (ans !='n') );
-    return ans;
+    return ask;
 }
 
 /***************************************************************************
