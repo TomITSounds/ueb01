@@ -29,7 +29,7 @@ void clearBuffer()
  Parameter: Zeile und Spalte der Frage
  *Ergebnis: Wahrheitswert
  **********************************************************/
-int askAgain(char *Prompt)
+int askYesOrNo(char *Prompt)
  {   char ans;
  int ask;
  do
@@ -49,13 +49,6 @@ int askAgain(char *Prompt)
  }  while ( (ans != 'j') && (ans != 'J') && (ans != 'N') && (ans !='n') );
  return ask;
  }
-
-void stop()
-{  char c;
-    do
-    {  scanf("%c", &c);
-    }  while (c != '\n');
-}
 
 /**********************************************************
  * Funktion: waitForEnter

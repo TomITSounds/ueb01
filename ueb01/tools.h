@@ -23,7 +23,7 @@ void clearBuffer(void);
  Parameter: Zeile und Spalte der Frage
  *Ergebnis: Wahrheitswert
  **********************************************************/
-int askAgain(char *Prompt);
+int askYesOrNo(char *Prompt);
 
 /**********************************************************
  * Funktion: waitForEnter

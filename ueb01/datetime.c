@@ -130,63 +130,39 @@ int getDateFromString(char *Input, TDate *pDate)
 int getTimeFromString(char *Input, TTime *Time)
 {   char *pHour = 0;
     char *pMinute = 0;
-    char *pSecond = 0;
     
     if (!*Input) //Falls String leer
         return 0;
-    if(*Input<='0' || *Input >='9') //Fals erste character Keine Zahl
+    if((*Input<='0') || (*Input >='9')) //Fals erste character Keine Zahl
         return 0;
     
-    pHour = Input++;
+    pHour = Input;
     
     while (*Input != ':')
-        pMinute =  ++Input;
-    pMinute++;
+        Input++;
+    Input++;
+    pMinute = Input;
     
-    if(*Input>='0' && *Input <='0') //Fals erste character Keine Zahl
+    if((*Input>='0') && (*Input <='0')) //Fals erste character Keine Zahl
         return 0;
     
-    while (*Input != ':' || !*Input)
-        pSecond =  ++Input;
-    
+    do
+        Input++;
+    while (*Input != ':' && (*Input != 0));
     
     Time->Hour = atoi(pHour);
     Time->Minute = atoi(pMinute);
-    if(*Input != ':')
-        Time->Second = atoi(pSecond);
-    else
-        Time->Second = 0;
+    Time->Second = 0;
+    if((*Input) == ':')
+        Input++;
+        if ((*Input>='0') && (*Input <='0'))
+            Time->Second = atoi(Input);
+ 
     
     
     return isTimeValid(Time);
-    
 }
-/***************************************************************************
- Funktion:  askYesOrNo
- Parameter: char string (Userprompt)
- Ergebnis:  Wahrheitswert als int
- Beschreib: Zeigt dem User einen Text (Aufforderung) Liest j/n Antwort ein
- ***************************************************************************/
-int askYesOrNo(char *Prompt)
-{   char ans;
-    int ask;
-    do
-    {   printf("\n");
-        printf(Prompt);
-        printf("\n");
-        scanf("%c", &ans);
-        if (ans != '\n')
-            clearBuffer();
-        switch (ans)
-        {   case 'j':
-            case 'J':   ask = 1; break;
-            case 'n':
-            case 'N':   ask = 0; break;
-            default:    printf("Ungueltige Eingabe.\nWollen sie nochmal? j/n\n");
-        }
-    }  while ( (ans != 'j') && (ans != 'J') && (ans != 'N') && (ans !='n') );
-    return ask;
-}
+
 
 /***************************************************************************
  Funktion:
