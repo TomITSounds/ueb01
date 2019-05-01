@@ -12,6 +12,8 @@
 #include "tools.h"
 #include "datastructure.h"
 #include <stdlib.h>
+#include <math.h>
+
 /***************************************************************************
  Funktion:  isLeapYear
  Parameter: Jahreszahl als int
@@ -20,18 +22,15 @@
  ***************************************************************************/
 int isLeapYear(int year)
 {   int leapYear = 0;
-    if ((year & 4) == 0)
-        if ((leapYear & 100) == 0)
-            if ((leapYear & 400) == 0)
+    if ((year % 4) == 0)
+        if ((leapYear % 100) == 0)
+            if ((leapYear % 400) == 0)
                 leapYear = 1;
             else
                 leapYear = 0;
-            else
-                leapYear = 1;
-    
-            else
-                leapYear = 0;
-    
+        else
+            leapYear = 1;
+  
     return leapYear;
 }
 /***************************************************************************
@@ -40,28 +39,29 @@ int isLeapYear(int year)
  Ergebnis:  Wahrheitswert als int
  Beschreib: Angeben ob das uebergebene Datum gueltig ist
  ***************************************************************************/
-int isDateValid(TDate *Date)
+int isDateValid(TDate *pDate)
 {
     int YearMax=2050;
     int YearMin=2018;
     
     //Jahr gueltig ?
-    if (Date->Year < YearMin || Date->Year > YearMax)
+    if (pDate->Year < YearMin || pDate->Year > YearMax)
     {
         return 0;
     }
     
     int DayMax;
     
-    switch (Date->Month){                           //versch. Cases für alle Monate
+    switch (pDate->Month){                           //versch. Cases für alle Monate
             
         case 1: DayMax=31;
             break;
-        case 2: if(isLeapYear(Date->Year)){
-            DayMax=29;
-        } else
-            DayMax=28;
-            break;
+        case 2: if(isLeapYear(pDate->Year)){
+                    DayMax=29;
+                }
+                else
+                    DayMax=28;
+                break;
         case 3: DayMax=31;
             break;
         case 4: DayMax=30;
@@ -88,7 +88,7 @@ int isDateValid(TDate *Date)
     }
     
     // Tag gueltig ?
-    if(Date->Day < 1 || Date->Day > DayMax)
+    if(pDate->Day < 1 || pDate->Day > DayMax)
     {
         return 0;
     }
@@ -123,60 +123,47 @@ int isTimeValid(TTime *Time)
  Ergebnis:  Wahrheitswert als int bei erfolgreichem Kopieren
  Beschreib: Liest ein Datum aus einer Zeichenkette und kopiert die in Struct, ruft IsDateValid auf
  ***************************************************************************/
-int getDateFromString(char *Input, TDate *Date)
-{
-    int i,j;
-    char *inputCount = Input;
-    char *dayArray;
-    char *monthArray;
-    char *yearArray;
-    *dayArray = '\0';       // Fuer den Fall, dass der Nutzer
-    *monthArray = '\0';     // nur einen Punkt eingibt, werden
-    *yearArray = '\0';      // Tag,Monat,Jahr auf Null gesetzt.
-    
-    for(i = 0; i < 3; i ++)
-    {
-        j = 0;
-        while(*inputCount != '.' && *inputCount != '\n')
-        {
-            if(*inputCount)
-            {
-                switch(i)      // Bei jedem for durchlauf wird ein anderer Wert geprueft
-                {
-                    case 0: *(dayArray+j) = *inputCount;    // bei i=0 wird Day beschrieben
-                        break;
-                    case 1: *(monthArray+j) = *inputCount;  // bei i=1 wird Month beschrieben
-                        break;
-                    case 2: *(yearArray+j) = *inputCount;   // bei i=2 wird year beschrieben
-                        break;
-                }
-            }
-            else
-                return 0;
-            inputCount ++;
-            j ++;
-        }
-        if(*inputCount == '\n' && i < 2)
+int getDateFromString(char *Input, TDate *pDate)
+    {   char *pDay = 0;
+        char *pMonth = 0;
+        char *pYear = 0;
+        int success;
+        
+        if (!*Input) //Falls String leer
             return 0;
-        switch(i)           // Das letzte Zeichen der Arrays auf \0 setzen...
-        {
-            case 0: *(dayArray+j) = '\0';
-                break;
-            case 1: *(monthArray+j) = '\0';
-                break;
-            case 2: *(yearArray+j) = '\0';
-                break;
+      //  if(*Input>='0' && *Input <='0') //Fals erste character Keine Zahl
+        //    return 0;
+        
+        pDay = Input;
+        
+        while (*Input != '.')
+        {   Input++;
+            pMonth =  Input;
         }
-        inputCount ++;
-    }
+        pMonth++;
+        Input++;
+        
+      //  if(*Input>='0' && *Input <='0') //Fals erste character Keine Zahl
+        //    return 0;
+        
+        while (*Input != '.')
+        {   Input++;
+            pYear =  Input;
+        }
+        pYear++;
+        
+      //  if(*Input>='0' && *Input <='0') //Fals erste character Keine Zahl
+          //  return 0;
+        
+        pDate->Day = atoi(pDay);
+        pDate->Month = atoi(pMonth);
+        pDate->Year = atoi(pYear);
+        
+        success = isDateValid(pDate);
+        
+        return success;
+        
     
-    Date->Day = atoi(dayArray);
-    Date->Month = atoi(monthArray);
-    Date->Year = atoi(yearArray);
-    if(isDateValid(Date))
-        return 1;
-    else
-        return 0;
 }
 /***************************************************************************
  Funktion:  getTimeFromString
@@ -185,61 +172,38 @@ int getDateFromString(char *Input, TDate *Date)
  Beschreib: Liest eine Zeit aus einer Zeichenkette und kopiert die in Struct, ruft IsTimeValid auf
  ***************************************************************************/
 int getTimeFromString(char *Input, TTime *Time)
-{
-    char *StdArray;
-    char *MinArray;
-    char *SekArray;
-    StdArray = '\0'; // wegen moeglicher Fehleingabe
-    MinArray = '\0'; // auf \0 setzen
-    SekArray = '\0';
-    char *inputCount = Input;
+{   char *pHour = 0;
+    char *pMinute = 0;
+    char *pSecond = 0;
     
-    int i,j;
-    for(i = 0; i < 3; i ++)
-    {
-        j = 0;
-        while(*Input != ':' && *Input != '\n')
-        {
-            if(*Input)
-            {
-                switch(i)      // Bei jedem for durchlauf wird ein anderer Wert geprueft
-                {
-                    case 0: *(StdArray+j) = *inputCount;    // bei i=0 wird Std beschrieben
-                        break;
-                    case 1: *(MinArray+j) = *inputCount;  // bei i=1 wird Min beschrieben
-                        break;
-                    case 2: *(SekArray+j) = *inputCount;   // bei i=2 wird Sek beschrieben
-                        break;
-                }
-            }
-            else
-                return 0;
-            j ++;
-            Input ++;
-        }
-        if(*Input == '\n' && i == 0)
-            return 0;
-        switch(i)           // Das letzte Zeichen der Arrays auf \0 setzen...
-        {
-            case 0: *(StdArray+j) = '\0';
-                break;
-            case 1: *(MinArray+j) = '\0';
-                break;
-            case 2: *(SekArray+j) = '\0';
-                break;
-        }
-        Input ++;
-    }
+    if (!*Input) //Falls String leer
+        return 0;
+    if(*Input<='0' || *Input >='9') //Fals erste character Keine Zahl
+        return 0;
     
-    Time->Hour = atoi(StdArray);
-    Time->Minute = atoi(MinArray);
-    Time->Second = atoi(SekArray);
-    if(isTimeValid(Time))
-    {
-        return 1;
-    }
+    pHour = Input++;
     
-    return 0;
+    while (*Input != ':')
+        pMinute =  ++Input;
+    pMinute++;
+    
+    if(*Input>='0' && *Input <='0') //Fals erste character Keine Zahl
+        return 0;
+    
+    while (*Input != ':' || !*Input)
+        pSecond =  ++Input;
+    
+    
+    Time->Hour = atoi(pHour);
+    Time->Minute = atoi(pMinute);
+    if(*Input != ':')
+        Time->Second = atoi(pSecond);
+    else
+        Time->Second = 0;
+    
+    
+    return isTimeValid(Time);
+    
 }
 /***************************************************************************
  Funktion:  askYesOrNo
@@ -262,7 +226,7 @@ int askYesOrNo(char *Prompt)
             case 'J':   ask = 1; break;
             case 'n':
             case 'N':   ask = 0; break;
-            default:    printf("Ungueltige Eingabe. Wollen sie nochmal? j/n\n");
+            default:    printf("Ungueltige Eingabe.\nWollen sie nochmal? j/n\n");
         }
     }  while ( (ans != 'j') && (ans != 'J') && (ans != 'N') && (ans !='n') );
     return ask;
