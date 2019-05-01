@@ -28,29 +28,27 @@ void clearBuffer()
  * Beschreibung: Fragt den Benutzer ob er dass Programm nochmal ausfuehren moecht
  Parameter: Zeile und Spalte der Frage
  *Ergebnis: Wahrheitswert
- **********************************************************
-int askAgain(int Row, int Col)
-{  int ask = 0;
-    char ans = 0;
-    
-    POSITION(Row, Col);
-    printf("Wolle sie nochmal? j/n\n");
-    do
-    {  POSITION (Row+1, Col);
-        CLEAR_LINE;
-        scanf("%c", &ans);
-        if (ans != '\n')
-            clearBuffer();
-        switch (ans)
-        {   case 'j':
-            case 'J':   ask = 1; break;
-            case 'n':
-            case 'N':   ask = 0; break;
-            default:    printf("Ungueltige Eingabe. Wollen sie nochmal? j/n\n");
-        }
-    }  while ( (ans != 'j') && (ans != 'J') && (ans != 'N') && (ans !='n') );
-    return ask;
-}
+ **********************************************************/
+int askAgain(char *Prompt)
+ {   char ans;
+ int ask;
+ do
+ {   printf("\n");
+ printf(Prompt);
+ printf("\n");
+ scanf("%c", &ans);
+ if (ans != '\n')
+ clearBuffer();
+ switch (ans)
+ {   case 'j':
+ case 'J':   ask = 1; break;
+ case 'n':
+ case 'N':   ask = 0; break;
+ default:    printf("Ungueltige Eingabe.\nWollen sie nochmal? j/n\n");
+ }
+ }  while ( (ans != 'j') && (ans != 'J') && (ans != 'N') && (ans !='n') );
+ return ask;
+ }
 
 void stop()
 {  char c;

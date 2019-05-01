@@ -23,7 +23,7 @@ void clearBuffer(void);
  Parameter: Zeile und Spalte der Frage
  *Ergebnis: Wahrheitswert
  **********************************************************/
-int askAgain(int Row, int Column);
+int askAgain(char *Prompt);
 
 /**********************************************************
  * Funktion: waitForEnter
