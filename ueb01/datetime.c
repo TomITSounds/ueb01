@@ -1,27 +1,4 @@
 
-Skip to content
-Pull requests
-Issues
-Marketplace
-Explore
-@TomITSounds
-
-0
-0
-
-0
-
-TomITSounds/ueb01
-Code
-Issues 0
-Pull requests 1
-Projects 1
-Wiki
-Insights
-Settings
-ueb01/ueb01-master.2/ueb01/datetime.c
-@freddiefreund freddiefreund Add files via upload db0c154 11 hours ago
-345 lines (315 sloc) 10.1 KB
 //
 //  datetime.c
 //  ueb01X
@@ -34,6 +11,7 @@ ueb01/ueb01-master.2/ueb01/datetime.c
 #include "datetime.h"
 #include "tools.h"
 #include "datastructure.h"
+#include <stdlib.h>
 /***************************************************************************
  Funktion:  isLeapYear
  Parameter: Jahreszahl als int
@@ -62,7 +40,7 @@ int isLeapYear(int year)
  Ergebnis:  Wahrheitswert als int
  Beschreib: Angeben ob das uebergebene Datum gueltig ist
  ***************************************************************************/
-int isDateValid(TDate Date)
+int isDateValid(TDate *Date)
 {
     int YearMax=2050;
     int YearMin=2018;
@@ -123,9 +101,8 @@ int isDateValid(TDate Date)
  Ergebnis:  Wahrheitswert als int
  Beschreib: Angeben ob die uebergebene Uhrzeit gueltig ist
  ***************************************************************************/
-int isTimeValid(TTime Time)
-{
-    // Stunden gueltig ?
+int isTimeValid(TTime *Time)
+{   // Stunden gueltig ?
     if(Time->Hour < 0 || Time->Hour > 23)
         return 0;
     
@@ -149,7 +126,7 @@ int isTimeValid(TTime Time)
 int getDateFromString(char *Input, TDate *Date)
 {
     int i,j;
-    char *inputCount = input;
+    char *inputCount = Input;
     char *dayArray;
     char *monthArray;
     char *yearArray;
@@ -193,10 +170,10 @@ int getDateFromString(char *Input, TDate *Date)
         inputCount ++;
     }
     
-    newDate->Day = atoi(dayArray);
-    newDate->Month = atoi(monthArray);
-    newDate->Year = atoi(yearArray);
-    if(isDateValid(newDate))
+    Date->Day = atoi(dayArray);
+    Date->Month = atoi(monthArray);
+    Date->Year = atoi(yearArray);
+    if(isDateValid(Date))
         return 1;
     else
         return 0;
@@ -215,14 +192,15 @@ int getTimeFromString(char *Input, TTime *Time)
     StdArray = '\0'; // wegen moeglicher Fehleingabe
     MinArray = '\0'; // auf \0 setzen
     SekArray = '\0';
+    char *inputCount = Input;
     
     int i,j;
     for(i = 0; i < 3; i ++)
     {
         j = 0;
-        while(*input != ':' && *input != '\n')
+        while(*Input != ':' && *Input != '\n')
         {
-            if(*input)
+            if(*Input)
             {
                 switch(i)      // Bei jedem for durchlauf wird ein anderer Wert geprueft
                 {
@@ -237,9 +215,9 @@ int getTimeFromString(char *Input, TTime *Time)
             else
                 return 0;
             j ++;
-            input ++;
+            Input ++;
         }
-        if(*input == '\n' && i == 0)
+        if(*Input == '\n' && i == 0)
             return 0;
         switch(i)           // Das letzte Zeichen der Arrays auf \0 setzen...
         {
@@ -250,7 +228,7 @@ int getTimeFromString(char *Input, TTime *Time)
             case 2: *(SekArray+j) = '\0';
                 break;
         }
-        input ++;
+        Input ++;
     }
     
     Time->Hour = atoi(StdArray);
@@ -274,7 +252,7 @@ int askYesOrNo(char *Prompt)
     int ask;
     do
     {   printf("\n");
-        printf(*Prompt);
+        printf(Prompt);
         printf("\n");
         scanf("%c", &ans);
         if (ans != '\n')
@@ -366,18 +344,3 @@ int askYesOrNo(char *Prompt)
  Ergebnis:
  Beschreib:
  ***************************************************************************/
-
-© 2019 GitHub, Inc.
-Terms
-Privacy
-Security
-Status
-Help
-
-Contact GitHub
-Pricing
-API
-Training
-Blog
-About
-

@@ -2,6 +2,7 @@
 #include "datastructure.h"
 #include "datetime.h"
 #include "tools.h"
+#include <stdlib.h>
 
 int main()
 {
