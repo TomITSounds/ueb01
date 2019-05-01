@@ -23,8 +23,8 @@
 int isLeapYear(int year)
 {   int leapYear = 0;
     if ((year % 4) == 0)
-        if ((leapYear % 100) == 0)
-            if ((leapYear % 400) == 0)
+        if ((year % 100) == 0)
+            if ((year % 400) == 0)
                 leapYear = 1;
             else
                 leapYear = 0;
