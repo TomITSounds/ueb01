@@ -127,41 +127,29 @@ int getDateFromString(char *Input, TDate *pDate)
     {   char *pDay = 0;
         char *pMonth = 0;
         char *pYear = 0;
-        int success;
         
         if (!*Input) //Falls String leer
             return 0;
-      //  if(*Input>='0' && *Input <='0') //Fals erste character Keine Zahl
-        //    return 0;
-        
+
         pDay = Input;
         
-        while (*Input != '.')
-        {   Input++;
-            pMonth =  Input;
-        }
-        pMonth++;
+        while (*Input != '.')           //Zeiger bis Punkt
+            Input++;
+        
         Input++;
+        pMonth = Input;
         
-      //  if(*Input>='0' && *Input <='0') //Fals erste character Keine Zahl
-        //    return 0;
-        
-        while (*Input != '.')
+        while (*Input != '.')           //Zeiger auf 2. Punkt
         {   Input++;
             pYear =  Input;
         }
         pYear++;
-        
-      //  if(*Input>='0' && *Input <='0') //Fals erste character Keine Zahl
-          //  return 0;
-        
-        pDate->Day = atoi(pDay);
+
+        pDate->Day = atoi(pDay);        //Wert Zuweisungen
         pDate->Month = atoi(pMonth);
         pDate->Year = atoi(pYear);
         
-        success = isDateValid(pDate);
-        
-        return success;
+        return isDateValid(pDate);
         
     
 }
