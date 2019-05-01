@@ -143,7 +143,7 @@ int getTimeFromString(char *Input, TTime *Time)
     Input++;
     pMinute = Input;
     
-    if((*Input>='0') && (*Input <='0')) //Fals erste character Keine Zahl
+    if((*Input>'9') && (*Input <'0')) //Fals erste character Keine Zahl
         return 0;
     
     do
@@ -155,10 +155,8 @@ int getTimeFromString(char *Input, TTime *Time)
     Time->Second = 0;
     if((*Input) == ':')
         Input++;
-        if ((*Input>='0') && (*Input <='0'))
+        if ((*Input>='0') && (*Input <='9'))
             Time->Second = atoi(Input);
- 
-    
     
     return isTimeValid(Time);
 }
