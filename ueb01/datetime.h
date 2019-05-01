@@ -16,7 +16,7 @@ int isLeapYear(int year);
  Ergebnis:  Wahrheitswert als int
  Beschreib: Angeben ob das uebergebene Datum gueltig ist
  ***************************************************************************/
-int isDateValid(TDate Date);
+int isDateValid(TDate *Date);
 
 /***************************************************************************
  Funktion:  isTimeValid
@@ -24,7 +24,7 @@ int isDateValid(TDate Date);
  Ergebnis:  Wahrheitswert als int
  Beschreib: Angeben ob die uebergebene Uhrzeit gueltig ist
  ***************************************************************************/
-int isTimeValid(TTime Time);
+int isTimeValid(TTime *Time);
 
 /***************************************************************************
  Funktion:  getDateFromString
@@ -93,4 +93,3 @@ int askYesOrNo(char *Promt);
  ***************************************************************************/
 
 #endif
-

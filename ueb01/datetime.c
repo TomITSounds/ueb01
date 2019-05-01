@@ -1,3 +1,4 @@
+
 //
 //  datetime.c
 //  ueb01X
@@ -10,6 +11,7 @@
 #include "datetime.h"
 #include "tools.h"
 #include "datastructure.h"
+#include <stdlib.h>
 /***************************************************************************
  Funktion:  isLeapYear
  Parameter: Jahreszahl als int
@@ -20,15 +22,15 @@ int isLeapYear(int year)
 {   int leapYear = 0;
     if ((year & 4) == 0)
         if ((leapYear & 100) == 0)
-                if ((leapYear & 400) == 0)
-                    leapYear = 1;
-                else
-                    leapYear = 0;
-        else
-            leapYear = 1;
-        
-    else
-        leapYear = 0;
+            if ((leapYear & 400) == 0)
+                leapYear = 1;
+            else
+                leapYear = 0;
+            else
+                leapYear = 1;
+    
+            else
+                leapYear = 0;
     
     return leapYear;
 }
@@ -38,9 +40,60 @@ int isLeapYear(int year)
  Ergebnis:  Wahrheitswert als int
  Beschreib: Angeben ob das uebergebene Datum gueltig ist
  ***************************************************************************/
-int isDateValid(TDate Date)
+int isDateValid(TDate *Date)
 {
+    int YearMax=2050;
+    int YearMin=2018;
     
+    //Jahr gueltig ?
+    if (Date->Year < YearMin || Date->Year > YearMax)
+    {
+        return 0;
+    }
+    
+    int DayMax;
+    
+    switch (Date->Month){                           //versch. Cases für alle Monate
+            
+        case 1: DayMax=31;
+            break;
+        case 2: if(isLeapYear(Date->Year)){
+            DayMax=29;
+        } else
+            DayMax=28;
+            break;
+        case 3: DayMax=31;
+            break;
+        case 4: DayMax=30;
+            break;
+        case 5: DayMax=31;
+            break;
+        case 6: DayMax=30;
+            break;
+        case 7: DayMax=31;
+            break;
+        case 8: DayMax=31;
+            break;
+        case 9: DayMax=30;
+            break;
+        case 10: DayMax=31;
+            break;
+        case 11: DayMax=30;
+            break;
+        case 12: DayMax=31;
+            break;
+            
+        default:    return 0;
+            break;
+    }
+    
+    // Tag gueltig ?
+    if(Date->Day < 1 || Date->Day > DayMax)
+    {
+        return 0;
+    }
+    
+    return 1;
 }
 /***************************************************************************
  Funktion:  isTimeValid
@@ -48,20 +101,82 @@ int isDateValid(TDate Date)
  Ergebnis:  Wahrheitswert als int
  Beschreib: Angeben ob die uebergebene Uhrzeit gueltig ist
  ***************************************************************************/
-int isTimeValid(TTime Time)
-{
+int isTimeValid(TTime *Time)
+{   // Stunden gueltig ?
+    if(Time->Hour < 0 || Time->Hour > 23)
+        return 0;
     
+    // Minuten gueltig ?
+    if(Time->Minute < 0 || Time->Minute > 59)
+        return 0;
+    
+    // Sekunden gueltig ?
+    if(Time->Second < 0 || Time->Second > 59)
+        return 0;
+    
+    // Wenn alles gueltig
+    return 1;
 }
 /***************************************************************************
  Funktion:  getDateFromString
- Parameter: *char Input, *TDate
+ Parameter: char *Input, TDate *Date
  Ergebnis:  Wahrheitswert als int bei erfolgreichem Kopieren
  Beschreib: Liest ein Datum aus einer Zeichenkette und kopiert die in Struct, ruft IsDateValid auf
  ***************************************************************************/
 int getDateFromString(char *Input, TDate *Date)
 {
+    int i,j;
+    char *inputCount = Input;
+    char *dayArray;
+    char *monthArray;
+    char *yearArray;
+    *dayArray = '\0';       // Fuer den Fall, dass der Nutzer
+    *monthArray = '\0';     // nur einen Punkt eingibt, werden
+    *yearArray = '\0';      // Tag,Monat,Jahr auf Null gesetzt.
     
+    for(i = 0; i < 3; i ++)
+    {
+        j = 0;
+        while(*inputCount != '.' && *inputCount != '\n')
+        {
+            if(*inputCount)
+            {
+                switch(i)      // Bei jedem for durchlauf wird ein anderer Wert geprueft
+                {
+                    case 0: *(dayArray+j) = *inputCount;    // bei i=0 wird Day beschrieben
+                        break;
+                    case 1: *(monthArray+j) = *inputCount;  // bei i=1 wird Month beschrieben
+                        break;
+                    case 2: *(yearArray+j) = *inputCount;   // bei i=2 wird year beschrieben
+                        break;
+                }
+            }
+            else
+                return 0;
+            inputCount ++;
+            j ++;
+        }
+        if(*inputCount == '\n' && i < 2)
+            return 0;
+        switch(i)           // Das letzte Zeichen der Arrays auf \0 setzen...
+        {
+            case 0: *(dayArray+j) = '\0';
+                break;
+            case 1: *(monthArray+j) = '\0';
+                break;
+            case 2: *(yearArray+j) = '\0';
+                break;
+        }
+        inputCount ++;
+    }
     
+    Date->Day = atoi(dayArray);
+    Date->Month = atoi(monthArray);
+    Date->Year = atoi(yearArray);
+    if(isDateValid(Date))
+        return 1;
+    else
+        return 0;
 }
 /***************************************************************************
  Funktion:  getTimeFromString
@@ -71,7 +186,60 @@ int getDateFromString(char *Input, TDate *Date)
  ***************************************************************************/
 int getTimeFromString(char *Input, TTime *Time)
 {
+    char *StdArray;
+    char *MinArray;
+    char *SekArray;
+    StdArray = '\0'; // wegen moeglicher Fehleingabe
+    MinArray = '\0'; // auf \0 setzen
+    SekArray = '\0';
+    char *inputCount = Input;
     
+    int i,j;
+    for(i = 0; i < 3; i ++)
+    {
+        j = 0;
+        while(*Input != ':' && *Input != '\n')
+        {
+            if(*Input)
+            {
+                switch(i)      // Bei jedem for durchlauf wird ein anderer Wert geprueft
+                {
+                    case 0: *(StdArray+j) = *inputCount;    // bei i=0 wird Std beschrieben
+                        break;
+                    case 1: *(MinArray+j) = *inputCount;  // bei i=1 wird Min beschrieben
+                        break;
+                    case 2: *(SekArray+j) = *inputCount;   // bei i=2 wird Sek beschrieben
+                        break;
+                }
+            }
+            else
+                return 0;
+            j ++;
+            Input ++;
+        }
+        if(*Input == '\n' && i == 0)
+            return 0;
+        switch(i)           // Das letzte Zeichen der Arrays auf \0 setzen...
+        {
+            case 0: *(StdArray+j) = '\0';
+                break;
+            case 1: *(MinArray+j) = '\0';
+                break;
+            case 2: *(SekArray+j) = '\0';
+                break;
+        }
+        Input ++;
+    }
+    
+    Time->Hour = atoi(StdArray);
+    Time->Minute = atoi(MinArray);
+    Time->Second = atoi(SekArray);
+    if(isTimeValid(Time))
+    {
+        return 1;
+    }
+    
+    return 0;
 }
 /***************************************************************************
  Funktion:  askYesOrNo
@@ -84,7 +252,7 @@ int askYesOrNo(char *Prompt)
     int ask;
     do
     {   printf("\n");
-        printf(*Prompt);
+        printf(Prompt);
         printf("\n");
         scanf("%c", &ans);
         if (ans != '\n')

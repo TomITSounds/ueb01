@@ -7,7 +7,6 @@
 //
 
 #include <stdio.h>
-#include "escapesequenzen.h"
 #include "tools.h"
 #include <stdlib.h>
 
@@ -29,7 +28,7 @@ void clearBuffer()
  * Beschreibung: Fragt den Benutzer ob er dass Programm nochmal ausfuehren moecht
  Parameter: Zeile und Spalte der Frage
  *Ergebnis: Wahrheitswert
- **********************************************************/
+ **********************************************************
 int askAgain(int Row, int Col)
 {  int ask = 0;
     char ans = 0;
