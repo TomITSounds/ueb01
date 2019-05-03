@@ -39,27 +39,58 @@ int isLeapYear(int year)
  Ergebnis:  Wahrheitswert als int
  Beschreib: Angeben ob das uebergebene Datum gueltig ist
  ***************************************************************************/
-int isDateValid(TDate *pDate)
-{   int YearMax=2050;
+int isDateValid(TDate *Date)
+{
+    int YearMax=2050;
     int YearMin=2018;
-    int MaxDay;
     
-    if (pDate->Year < YearMin || pDate->Year > YearMax)     //Jahr gueltig ?
+    //Jahr gueltig ?
+    if (Date->Year < YearMin || Date->Year > YearMax)
+    {
         return 0;
+    }
     
-    if (pDate->Month < 1 || pDate->Month > 12)          //Monat gueltig
+    int DayMax;
+    
+    switch (Date->Month){                           //versch. Cases für alle Monate
+            
+        case 1: DayMax=31;
+            break;
+        case 2: if(isLeapYear(Date->Year)){
+            DayMax=29;
+        } else
+            DayMax=28;
+            break;
+        case 3: DayMax=31;
+            break;
+        case 4: DayMax=30;
+            break;
+        case 5: DayMax=31;
+            break;
+        case 6: DayMax=30;
+            break;
+        case 7: DayMax=31;
+            break;
+        case 8: DayMax=31;
+            break;
+        case 9: DayMax=30;
+            break;
+        case 10: DayMax=31;
+            break;
+        case 11: DayMax=30;
+            break;
+        case 12: DayMax=31;
+            break;
+            
+        default:    return 0;
+            break;
+    }
+    
+    // Tag gueltig ?
+    if(Date->Day < 1 || Date->Day > DayMax)
+    {
         return 0;
-    
-    if (pDate->Day % 2 == 0)                         //Gerade Monate = 30 ausser Feb sonst 31
-        if (pDate->Month == 2)
-            MaxDay = 28 + isLeapYear(pDate->Year);
-        else
-            MaxDay = 30;
-    else
-        MaxDay = 31;
-    
-    if(pDate->Day < 1 || pDate->Day > MaxDay)           // Tag gueltig ?
-        return 0;
+    }
     
     return 1;
 }
